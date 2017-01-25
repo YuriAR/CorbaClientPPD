@@ -1,0 +1,45 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<GridPane fx:controller="sample.Controller"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+
+    <Label text="Processo:"
+          GridPane.columnIndex="0" GridPane.rowIndex="1"
+          GridPane.columnSpan="1">
+        <font>
+            <Font name="Arial Black" size="13.0" />
+        </font>
+    </Label>
+
+    <Label text="PID"
+          fx:id="processId"
+          GridPane.columnIndex="1" GridPane.rowIndex="1"
+          GridPane.columnSpan="1"/>
+
+    <Label text="Status:"
+          GridPane.columnIndex="0" GridPane.rowIndex="2"
+          GridPane.columnSpan="1">
+        <font>
+            <Font name="Arial Black" size="13.0" />
+        </font>
+    </Label>
+
+    <Label text="IDLE"
+          fx:id="processStatus"
+          GridPane.columnIndex="1" GridPane.rowIndex="2"
+          GridPane.columnSpan="1"/>
+
+    <Button text="Solicitar recurso"
+            fx:id="buttonRequest"
+            GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+
+    <Button text="Liberar recurso"
+            fx:id="buttonRelease"
+            GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+
+</GridPane>
