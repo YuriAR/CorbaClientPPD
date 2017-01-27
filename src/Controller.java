@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class Controller implements Initializable{
+public class Controller implements Initializable, UICommunication{
     @FXML
     Label processId;
     @FXML
@@ -20,14 +20,16 @@ public class Controller implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        buttonRelease.setDisable(true);
+        ProcessInterfaceImpl processInterface = new ProcessInterfaceImpl(this);
         //alert pedindo porta
 
             buttonRequest.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     //Enviar request
-                    //Change status
+                    buttonRequest.setDisable(true);
+                    processStatus.setText("Aguardando recurso");
                 }
             });
 
@@ -35,9 +37,16 @@ public class Controller implements Initializable{
                 @Override
                 public void handle(MouseEvent event) {
                     //Enviar release
-                    //Change status
+                    buttonRelease.setDisable(true);
+                    processStatus.setText("IDLE");
                 }
             });
 
+    }
+
+    @Override
+    public void onResourceConceded() {
+        buttonRelease.setDisable(false);
+        processStatus.setText("Usando recurso");
     }
 }

@@ -1,0 +1,10 @@
+module ProcessResourceCommunication{
+	interface ProcessInterface{
+        void concedeResource();
+	};
+//
+//	interface CoordinatorInterface{
+//        void requestResource (in string pId);
+//        void releaseResource ();
+//	};
+};

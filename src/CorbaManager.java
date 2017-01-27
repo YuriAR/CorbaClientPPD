@@ -1,4 +1,3 @@
-import ResourceCommunication.ProcessInterfacePOA;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContext;
