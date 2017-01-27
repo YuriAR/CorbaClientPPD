@@ -1,0 +1,6 @@
+module CoordinatorResourceCommunication{
+	interface CoordinatorInterface{
+        void requestResource (in string pId);
+        void releaseResource ();
+	};
+};
