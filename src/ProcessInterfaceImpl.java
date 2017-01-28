@@ -1,4 +1,5 @@
 import ProcessResourceCommunication.ProcessInterfacePOA;
+import javafx.application.Platform;
 
 /**
  * Created by yurir on 27/01/2017.
@@ -13,6 +14,11 @@ public class ProcessInterfaceImpl extends ProcessInterfacePOA{
 
     @Override
     public void concedeResource() {
-        listener.onResourceConceded();
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                listener.onResourceConceded();
+            }
+        });
     }
 }

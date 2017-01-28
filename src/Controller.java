@@ -3,6 +3,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -12,6 +13,7 @@ import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -27,14 +29,29 @@ public class Controller implements Initializable, UICommunication{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO: alert pedindo porta
-
         buttonRelease.setDisable(true);
-        final CorbaManager manager = new CorbaManager("1");
-        manager.initCorba(new String[] {"localhost", "1515"});
+        int randomPIN = (int)(Math.random()*9000)+1000;
+        final CorbaManager manager = new CorbaManager(String.valueOf(randomPIN));
+        processId.setText("Processo " + manager.myPid);
+
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setTitle("Processo");
+        dialog.setHeaderText("Porta do processo");
+        dialog.setContentText("Digite a porta: ");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            manager.initCorba(new String[] {"localhost", result.get()});
+        }
+        else{
+            manager.initCorba(new String[] {"localhost", "1516"});
+        }
+
+        //manager.initCorba(new String[] {"localhost", "1516"});
 
         try{
-            ORB orb = ORB.init(new String[] {"localhost", "1515"},null);
+            //ORB orb = ORB.init(new String[] {"localhost", "1515"},null);
+            ORB orb = manager.orb;
             org.omg.CORBA.Object objPoa = orb.resolve_initial_references("RootPOA");
             POA rootPOA = POAHelper.narrow(objPoa);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
@@ -45,7 +62,7 @@ public class Controller implements Initializable, UICommunication{
             naming.rebind(name,objRef);
             rootPOA.the_POAManager().activate();
             processStatus.setText("Processo pronto");
-            orb.run();
+            //orb.run();
 
         }catch (Exception ex){
             System.out.println("Erro");
@@ -67,6 +84,7 @@ public class Controller implements Initializable, UICommunication{
                 public void handle(MouseEvent event) {
                     //Enviar release
                     buttonRelease.setDisable(true);
+                    buttonRequest.setDisable(false);
                     processStatus.setText("IDLE");
                     manager.releaseResource();
                 }

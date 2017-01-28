@@ -12,6 +12,7 @@ public class CorbaManager {
 
     CoordinatorInterface coordinator;
     String myPid;
+    ORB orb;
 
 
     public CorbaManager(String pId){
@@ -21,7 +22,7 @@ public class CorbaManager {
     public void initCorba(String [] args){
         try{
 
-            ORB orb = ORB.init(args,null);
+            orb = ORB.init(args,null);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
 
             NamingContext naming = NamingContextHelper.narrow(obj);
