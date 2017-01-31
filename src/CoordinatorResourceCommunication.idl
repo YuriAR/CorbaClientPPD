@@ -2,5 +2,6 @@ module CoordinatorResourceCommunication{
 	interface CoordinatorInterface{
         void requestResource (in string pId);
         void releaseResource ();
+        void registerId(out string pId);
 	};
 };

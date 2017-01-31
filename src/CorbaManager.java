@@ -5,6 +5,8 @@ import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContext;
 import org.omg.CosNaming.NamingContextHelper;
 
+import java.util.Properties;
+
 /**
  * Created by yurir on 26/01/2017.
  */
@@ -14,15 +16,10 @@ public class CorbaManager {
     String myPid;
     ORB orb;
 
-
-    public CorbaManager(String pId){
-        this.myPid = pId;
-    }
-
-    public void initCorba(String [] args){
+    public void initCorba(Properties props){
         try{
 
-            orb = ORB.init(args,null);
+            orb = ORB.init(new String[]{},props);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
 
             NamingContext naming = NamingContextHelper.narrow(obj);

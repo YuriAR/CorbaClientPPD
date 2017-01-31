@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import org.omg.CORBA.ORB;
+import org.omg.CORBA.StringHolder;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContext;
 import org.omg.CosNaming.NamingContextHelper;
@@ -14,6 +15,7 @@ import org.omg.PortableServer.POAHelper;
 
 import java.net.URL;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 
@@ -30,24 +32,30 @@ public class Controller implements Initializable, UICommunication{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buttonRelease.setDisable(true);
-        int randomPIN = (int)(Math.random()*9000)+1000;
-        final CorbaManager manager = new CorbaManager(String.valueOf(randomPIN));
-        processId.setText("Processo " + manager.myPid);
+        final CorbaManager manager = new CorbaManager();
 
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("Processo");
-        dialog.setHeaderText("Porta do processo");
+        dialog.setHeaderText("Porta do servidor de nomes");
         dialog.setContentText("Digite a porta: ");
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-            manager.initCorba(new String[] {"localhost", result.get()});
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialPort", result.get());
+            manager.initCorba(props);
         }
         else{
-            manager.initCorba(new String[] {"localhost", "1516"});
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialPort", "1050");
+            manager.initCorba(props);
         }
 
-        //manager.initCorba(new String[] {"localhost", "1516"});
+        StringHolder myPid = new StringHolder();
+        manager.coordinator.registerId(myPid);
+        manager.myPid = myPid.value;
+
+        processId.setText("Processo " + manager.myPid);
 
         try{
             //ORB orb = ORB.init(new String[] {"localhost", "1515"},null);
